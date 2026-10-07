@@ -5,5 +5,4 @@ Metodologias de desarrollo de software
 DevTeam UPB
 
 # Nombres de los integrantes
-Juan José Sierra Sierra 
-David Ezequiel Ortiz Figueroa
+Juan José Sierra Sierra - David Ezequiel Ortiz Figueroa
