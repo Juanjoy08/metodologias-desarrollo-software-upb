@@ -1,11 +1,36 @@
 from utils.terminal import limpiar
+import Backend.productos as Productos
+from tabulate import tabulate
 
+headers=["ID", "Nombre", "Precio", "Cantidad"]
 
 def listaProductos():
-    print("Seleccionaste la opción lista de productos")   
+    productos = Productos.listarProductos()
+
+    print(tabulate(productos, headers=headers, tablefmt="rounded_grid"))
+  
 
 def mostrarProductos():
-    print("Seleccionaste la opción mostrar productos")
+    idProducto = input("Ingrese el ID del producto: ")
+
+    try:
+        idProducto = int(idProducto)
+    except ValueError:
+        print("El ID debe ser un número.")
+        return
+
+    producto = Productos.consultarProducto(idProducto)
+
+    if producto is None:
+        print(f"No existe un producto con el ID {idProducto}")
+        return
+
+    print(tabulate(
+        [producto[1:]],
+        headers=headers,
+        tablefmt="rounded_grid"
+    ))
+
 
 def mostrarMenuProductos():
     separador = "------------------------------------------------"
