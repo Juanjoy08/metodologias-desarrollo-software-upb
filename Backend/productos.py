@@ -12,6 +12,7 @@ def listarProductos():
         min_col=1,
         max_col=4
     )
+    
 
     for refFila in refFilas:
         valores = []
