@@ -1,4 +1,5 @@
 from Backend.hoja_producto import obtenerHojaDeProductos
+from Backend.excel import guardarHoja
 
 hoja = obtenerHojaDeProductos()
 
@@ -22,7 +23,7 @@ def listarProductos():
 
     return filas
 
-def consultarProducto(idProducto):
+def consultarProducto(idProducto, soloValores=True):
     refFilas = hoja.iter_rows(
         min_row=2,
         max_row=hoja.max_row,
@@ -33,15 +34,57 @@ def consultarProducto(idProducto):
     refFilasEnum = enumerate(refFilas)
 
     for idx, refFila in refFilasEnum:
-        if refFila[0].value == idProducto:
-            valores = []
+        if str(refFila[0].value) == str(idProducto):
 
-            valores.append(idx)
+            if soloValores:
+                valores = []
+                valores.append(idx)
 
-            for celda in refFila:
-                valores.append(celda.value)
+                for celda in refFila:
+                    valores.append(celda.value)
 
-            return valores
+                return valores
+
+            else:
+                return refFila
 
     return None
 
+def crearProducto(idProducto, nombre, precio, cantidad):
+    if consultarProducto(idProducto) != None:
+        return False
+
+    producto = (idProducto, nombre, precio, cantidad)
+
+    hoja.append(producto)
+
+    guardarHoja(hoja)
+
+    return True
+
+def eliminarProducto(idProducto):
+    producto = consultarProducto(idProducto)
+
+    if producto == None:
+        return False
+
+    hoja.delete_rows(producto[0] + 2)
+
+    guardarHoja(hoja)
+
+    return True
+
+def actualizarProducto(idProducto, nombre, precio, cantidad):
+    nuevos_valores = (idProducto, nombre, precio, cantidad)
+
+    refFila = consultarProducto(idProducto, False)
+
+    if refFila == None:
+        return False
+
+    for celda, nuevo_valor in zip(refFila, nuevos_valores):
+        celda.value = nuevo_valor
+
+    guardarHoja(hoja)
+
+    return True
